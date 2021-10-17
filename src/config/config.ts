@@ -19,7 +19,7 @@ export default () => ({
     password: process.env.TYPEORM_PASSWORD,
     database: process.env.TYPEORM_DATABASE,
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    migrationsRun: true,
+    migrationsRun: false,
     migrations: [join(__dirname, '../migration/**/*{.ts,.js}')],
     migrationTableName: 'migrations',
     cli: {
@@ -27,5 +27,5 @@ export default () => ({
       entitiesDir: __dirname + '/../**/**/*.entity{.ts,.js}',
     },
     synchronize: true,
-  }
+  },
 });

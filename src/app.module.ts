@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './modules/user/user.module';
 import config from './config/config';
 @Module({
   imports: [
@@ -14,8 +15,10 @@ import config from './config/config';
       useFactory: async () =>
         Object.assign(await getConnectionOptions(), {
           ...config().database,
+          autoloadEntities: true,
         }),
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

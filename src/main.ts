@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import * as bodyParser from 'body-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -17,7 +17,7 @@ async function bootstrap() {
   const corsAllowed = config.get('cors_allowed');
   const basePath = 'api';
   app.use(bodyParser.json({ limit: '50mb' }));
-  app.setGlobalPrefix(`${basePath}${apiVersion}`);
+  app.setGlobalPrefix(`${basePath}/${apiVersion}`);
 
   const options = new DocumentBuilder()
     .setTitle(appName)
@@ -29,6 +29,17 @@ async function bootstrap() {
   app.enableCors({
     origin: corsAllowed,
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: false,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
 
   SwaggerModule.setup(`api/${apiVersion}/api-docs`, app, document, { swaggerOptions: { displayRequestDuration: true } });
 
