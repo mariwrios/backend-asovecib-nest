@@ -15,7 +15,11 @@ import config from './config/config';
       useFactory: async () =>
         Object.assign(await getConnectionOptions(), {
           ...config().database,
+          name: 'asovecib-db',
           autoloadEntities: true,
+          options: {
+            useUTC: true,
+          },
         }),
     }),
     UserModule,
